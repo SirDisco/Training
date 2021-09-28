@@ -43,7 +43,7 @@ namespace FizzBuzzOther
         private static void Reverse(outputList output) { output.Reverse(); }
         
         // Actions to perform (order matters)
-        private static FizzAction[] actions =
+        private static List<FizzAction> actions = new List<FizzAction>()
         {
             Tuple.Create<int, Action<List<string>>>(3, Fizz),
             Tuple.Create<int, Action<List<string>>>(5, Buzz),
@@ -88,8 +88,18 @@ namespace FizzBuzzOther
             return value;
         }
 
+        private static void ActivateActions(int[] actionsToUse)
+        {
+            for (int i = actions.Count - 1; i >= 0; i--)
+            {
+                if (!actionsToUse.Contains(actions[i].Item1))
+                    actions.RemoveAt(i);
+            }
+        }
+
         private static void Main(string[] args)
         {
+            ActivateActions(args.Select(int.Parse).ToArray());
             int totalIterations = GetUserInputIterations();
             
             for (int i = 1; i <= totalIterations; i++)

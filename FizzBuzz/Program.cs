@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 
-namespace FizzBuzzOther
+namespace FizzBuzz
 {
     // Fizz function takes in list of current FizzBuzz objects
     using outputList = List<string>;
     using FizzAction = Tuple<int, Action<List<string>>>;
 
-    class Program
+    class Fizzer : IEnumerable
     {
         // Prints "Fizz" on mod 3
         private static void Fizz(outputList output) { output.Add("Fizz"); }
@@ -54,7 +54,14 @@ namespace FizzBuzzOther
             Tuple.Create<int, Action<List<string>>>(11, Bong)
         };
 
-        private static void PrintFizz(int value)
+        private int m_Iterations;
+
+        public Fizzer(int iterations)
+        {
+            m_Iterations = iterations;
+        }
+
+        public string GetFizz(int value)
         {
             var output = new List<string>();
             
@@ -62,14 +69,14 @@ namespace FizzBuzzOther
             foreach (FizzAction act in actions)
                 if (value % act.Item1 == 0)
                     act.Item2.Invoke(output);
-            
+
             if (output.Count == 0)
-                Console.WriteLine(value);
+                return value.ToString();
             else
-                Console.WriteLine(string.Join("", output));
+                return string.Join("", output);
         }
 
-        private static int GetUserInputIterations()
+        public static int GetUserInputIterations()
         {
             bool isValid = false;
             int value = 0;
@@ -88,7 +95,7 @@ namespace FizzBuzzOther
             return value;
         }
 
-        private static void ActivateActions(int[] actionsToUse)
+        public void ActivateActions(int[] actionsToUse)
         {
             for (int i = actions.Count - 1; i >= 0; i--)
             {
@@ -96,95 +103,27 @@ namespace FizzBuzzOther
                     actions.RemoveAt(i);
             }
         }
-
-        private static void Main(string[] args)
+        
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            ActivateActions(args.Select(int.Parse).ToArray());
-            int totalIterations = GetUserInputIterations();
-            
-            for (int i = 1; i <= totalIterations; i++)
-                PrintFizz(i);
+            for (int i = 1; i <= m_Iterations; i++)
+            {
+                yield return GetFizz(i);
+            }
         }
     }
-}
 
-namespace FizzBuzz
-{
     class Program
     {
-        private static Tuple<int, string>[] conversion =
+        private static void Main(string[] args)
         {
-            Tuple.Create(3, "Fizz"),
-            Tuple.Create(5, "Buzz"),
-            Tuple.Create(7, "Bang")
-        };
-
-        static void AddFezzToOutput(List<string> output)
-        {
-            // Insert Fezz before first 'B'
-            for (int i = 0; i < output.Count; i++)
-            {
-                if (output[i].StartsWith('B'))
-                {
-                    output.Insert(i, "Fezz");
-                    return;
-                }
-            }
+            int totalIterations = Fizzer.GetUserInputIterations();
+            var fizzbuzz = new Fizzer(totalIterations);
             
-            // If no 'B' found then append to output
-            output.Add("Fezz");
-        }
+            fizzbuzz.ActivateActions(args.Select(int.Parse).ToArray());
 
-        static void PrintCorrectFizz(int value)
-        {
-            var output = new List<string>();
-
-            // Check against all Fizz/Buzz entries in array
-            foreach (var entry in conversion)
-                if ((value % entry.Item1) == 0)
-                    output.Add(entry.Item2);
-            
-            // Check for multiple of 13
-            if (value % 13 == 0)
-                AddFezzToOutput(output);
-
-            // Reverse array if multiple of 17
-            if (value % 17 == 0)
-                output.Reverse();
-            
-            // Wipe array and print Bong if multiple of 11
-            if (value % 11 == 0)
-            {
-                output.Clear();
-                output.Add("Bong");
-            }
-
-            // Print number if nothing else exists
-            if (output.Count == 0)
-                output.Add(value.ToString());
-            
-            Console.WriteLine(string.Join("", output));
-        }
-
-        static void Main2(string[] args)
-        {
-            // Get user input for total numbers to print
-            bool valid = false;
-            int max = 0;
-            
-            while (!valid)
-            {
-                Console.Write("Enter total numbers: ");
-                string input = Console.ReadLine();
-                
-                if (!int.TryParse(input, out max))
-                    Console.WriteLine("Invalid Input");
-                else
-                    valid = true;
-            }
-
-            for (int i = 1; i <= max; i++)
-                PrintCorrectFizz(i);
+            foreach (var it in fizzbuzz)
+                Console.WriteLine(it);
         }
     }
 }

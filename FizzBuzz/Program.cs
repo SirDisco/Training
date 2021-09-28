@@ -63,7 +63,22 @@ namespace FizzBuzz
 
         static void Main(string[] args)
         {
-            for (int i = 1; i <= 256; i++)
+            // Get user input for total numbers to print
+            bool valid = false;
+            int max = 0;
+            
+            while (!valid)
+            {
+                Console.Write("Enter total numbers: ");
+                string input = Console.ReadLine();
+                
+                if (!int.TryParse(input, out max))
+                    Console.WriteLine("Invalid Input");
+                else
+                    valid = true;
+            }
+
+            for (int i = 1; i <= max; i++)
                 PrintCorrectFizz(i);
         }
     }

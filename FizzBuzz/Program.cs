@@ -11,9 +11,24 @@ namespace FizzBuzz
             Tuple.Create(5, "Buzz"),
             Tuple.Create(7, "Bang")
         };
+
+        static bool CheckAndPrintMultipleOf13(int value)
+        {
+            if ((value % 11) == 0)
+            {
+                Console.WriteLine("Bong");
+                return true;
+            }
+
+            return false;
+        }
     
         static void PrintCorrectFizz(int value)
         {
+            // Check for 'Bong' and then return if needed
+            if (CheckAndPrintMultipleOf13(value))
+                return;
+            
             bool hasPrintedWord = false;
             
             // Check against all Fizz/Buzz entries in array

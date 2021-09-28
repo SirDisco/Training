@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 
 namespace FizzBuzz
 {
     class Program
     {
+        private static List<string> output = new List<string>();
+
         private static Tuple<int, string>[] conversion =
         {
             Tuple.Create(3, "Fizz"),
@@ -12,46 +16,57 @@ namespace FizzBuzz
             Tuple.Create(7, "Bang")
         };
 
-        static bool CheckAndPrintMultipleOf13(int value)
+        static void AddFezzToOutput()
         {
-            if ((value % 11) == 0)
+            // Insert Fezz before first 'B'
+            for (int i = 0; i < output.Count; i++)
             {
-                Console.WriteLine("Bong");
-                return true;
-            }
-
-            return false;
-        }
-    
-        static void PrintCorrectFizz(int value)
-        {
-            // Check for 'Bong' and then return if needed
-            if (CheckAndPrintMultipleOf13(value))
-                return;
-            
-            bool hasPrintedWord = false;
-            
-            // Check against all Fizz/Buzz entries in array
-            foreach (var entry in conversion)
-            {
-                if ((value % entry.Item1) == 0)
+                if (output[i].StartsWith('B'))
                 {
-                    Console.Write(entry.Item2);
-                    hasPrintedWord = true;
+                    output.Insert(i, "Fezz");
+                    return;
                 }
             }
             
-            if (!hasPrintedWord)
-                Console.Write(value);
-            
-            Console.WriteLine();
+            // If no 'B' found then append to output
+            output.Add("Fezz");
         }
+
+        static void PrintCorrectFizz(int value)
+        {
+            output.Clear();
+
+            // Check against all Fizz/Buzz entries in array
+            foreach (var entry in conversion)
+                if ((value % entry.Item1) == 0)
+                    output.Add(entry.Item2);
+            
+            // Check for multiple of 13
+            if (value % 13 == 0)
+                AddFezzToOutput();
+
+            // Reverse array if multiple of 17
+            if (value % 17 == 0)
+                output.Reverse();
+            
+            // Wipe array and print Bong if multiple of 11
+            if (value % 11 == 0)
+            {
+                output.Clear();
+                output.Add("Bong");
+            }
+
+            // Print number if nothing else exists
+            if (output.Count == 0)
+                output.Add(value.ToString());
+            
+            Console.WriteLine(string.Join("", output));
+        }
+
         static void Main(string[] args)
         {
-            for (int i = 1; i <= 100; i++)
-            {
+            for (int i = 1; i <= 256; i++)
                 PrintCorrectFizz(i);
-            }
         }
     }
 }

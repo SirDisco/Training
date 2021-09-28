@@ -7,8 +7,6 @@ namespace FizzBuzz
 {
     class Program
     {
-        private static List<string> output = new List<string>();
-
         private static Tuple<int, string>[] conversion =
         {
             Tuple.Create(3, "Fizz"),
@@ -16,7 +14,7 @@ namespace FizzBuzz
             Tuple.Create(7, "Bang")
         };
 
-        static void AddFezzToOutput()
+        static void AddFezzToOutput(List<string> output)
         {
             // Insert Fezz before first 'B'
             for (int i = 0; i < output.Count; i++)
@@ -34,7 +32,7 @@ namespace FizzBuzz
 
         static void PrintCorrectFizz(int value)
         {
-            output.Clear();
+            var output = new List<string>();
 
             // Check against all Fizz/Buzz entries in array
             foreach (var entry in conversion)
@@ -43,7 +41,7 @@ namespace FizzBuzz
             
             // Check for multiple of 13
             if (value % 13 == 0)
-                AddFezzToOutput();
+                AddFezzToOutput(output);
 
             // Reverse array if multiple of 17
             if (value % 17 == 0)

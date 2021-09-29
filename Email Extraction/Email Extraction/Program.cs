@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 
 namespace Email_Extraction
 {
     class Program
     {
-        static void NaiveApproach(StreamReader text)
+        static void NaiveApproach(String content)
         {
             int totalSoftwireEmails = 0;
+            StringReader text = new StringReader(content);
 
             string line;
             while ((line = text.ReadLine()) != null)
@@ -23,8 +25,10 @@ namespace Email_Extraction
             Console.WriteLine("Naive Approach: " + totalSoftwireEmails.ToString() + " softwire emails");
         }
 
-        static void RegexApproach(StreamReader text)
+        static void RegexApproach(String content)
         {
+            StringReader text = new StringReader(content);
+
             Regex pattern = new Regex(@"(\w+(?i)@softwire.com(?-i))\b");
 
             int totalSoftwireEmails = pattern.Matches(text.ReadToEnd()).Count;
@@ -32,9 +36,8 @@ namespace Email_Extraction
             Console.WriteLine("Regex Approach: " + totalSoftwireEmails.ToString() + " softwire emails");
         }
 
-        static void DictionaryApproach(StreamReader text)
+        static void DictionaryApproach(String wholeText)
         {
-            string wholeText = text.ReadToEnd();
 
             // Regex emailRegex = new Regex(@"[a-zA-Z0-9-_.]+(@[a-zA-Z0-9-]+)\.\w+");
             Regex emailRegex = new Regex(@"[a-zA-Z0-9-_.]+(@[a-zA-Z0-9-.]+)");
@@ -76,17 +79,22 @@ namespace Email_Extraction
             // Regular Expression Exercises
             // Phone Number: ^(?:0|\+?44)\s?(?:\d\s?){10}$
 
-            string emailFile = "sample.txt";
+            /*string emailFile = "sample.txt";
 
-            StreamReader reader = File.OpenText(emailFile);
+            StreamReader reader = File.OpenText(emailFile);*/
 
-            NaiveApproach(reader);
+            WebClient client = new WebClient();
+            Stream stream =
+                client.OpenRead(
+                    "https://raw.githubusercontent.com/techswitch-learners/email-extraction-csharp/master/EmailExtraction/Data/sample.txt");
+            StreamReader reader = new StreamReader(stream);
+            String content = reader.ReadToEnd();
 
-            reader.BaseStream.Position = 0;
-            RegexApproach(reader);
+            NaiveApproach(content);
+
+            RegexApproach(content);
             
-            reader.BaseStream.Position = 0;
-            DictionaryApproach(reader);
+            DictionaryApproach(content);
         }
     }
 }

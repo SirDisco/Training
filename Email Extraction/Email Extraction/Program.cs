@@ -79,6 +79,9 @@ namespace Email_Extraction
         {
             // Regular Expression Exercises
             // Phone Number: ^(?:0|\+?44)\s?(?:\d\s?){10}$
+            
+            // Separate Names: ^(?:(?<FullName>(?<Title>Mr|Mrs|Miss|Dr|Master) ?)?(?<FirstName>[A-Z][a-z]*) ?(?<MiddleName>(?:[A-Z][a-z]+)?(?: (?:[A-Z][a-z]+))*) ?(?<Surname>[A-Z][a-z]+))$
+            // https://regex101.com/r/EVNSse/1
 
             /*string emailFile = "sample.txt";
 

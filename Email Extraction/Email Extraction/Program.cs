@@ -73,6 +73,9 @@ namespace Email_Extraction
 
         static void Main(string[] args)
         {
+            // Regular Expression Exercises
+            // Phone Number: ^(?:0|\+?44)\s?(?:\d\s?){10}$
+
             string emailFile = "sample.txt";
 
             StreamReader reader = File.OpenText(emailFile);

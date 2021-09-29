@@ -62,7 +62,7 @@ namespace Email_Extraction
             int numberToDisplay = 1000;
             int threshold = 0;
 
-            foreach (var domain in domainCount.OrderBy(key => key.Value).Reverse())
+            foreach (var domain in domainCount.OrderByDescending(key => key.Value))
             {
                 if (domain.Value >= threshold)
                 {

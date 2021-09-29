@@ -40,7 +40,8 @@ namespace Email_Extraction
         {
 
             // Regex emailRegex = new Regex(@"[a-zA-Z0-9-_.]+(@[a-zA-Z0-9-]+)\.\w+");
-            Regex emailRegex = new Regex(@"[a-zA-Z0-9-_.]+(@[a-zA-Z0-9-.]+)");
+            // Regex emailRegex = new Regex(@"[a-zA-Z0-9-_.]+(@[a-zA-Z0-9-.]+)");
+            Regex emailRegex = new Regex(@"(?:[a-zA-Z0-9]|[-_.][a-zA-Z0-9])+@((?:[a-zA-Z]|-[a-zA-Z0-9])+(?:\.[a-zA-Z0-9][a-zA-Z0-9]+)+)\s");
 
             MatchCollection domainCollection = emailRegex.Matches(wholeText);
 

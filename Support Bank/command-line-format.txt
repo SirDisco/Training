@@ -1,0 +1,12 @@
+## Interacting
+
+bank --help
+	
+	bank -h, --help       -> Prints help message
+	bank -l x, --list x   -> Lists transactions owned by x, if not specified list all transactions
+	bank -s x, --simple x -> Lists simple information about user x, if not specified list all users
+
+
+---- This is what I am doing now
+	bank list             -> Lists transactions owned by all users
+	bank list -u, --user  -> Lists transactions owned by user

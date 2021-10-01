@@ -27,6 +27,23 @@ namespace Support_Bank
             }
         }
 
+        static void ParseTransactions(StreamReader fileReader)
+        {
+            string line;
+            while ((line = fileReader.ReadLine()) != null)
+            {
+                string[] columns = line.Split(",");
+                var sender = m_Accounts[columns[1]];
+                var recipient = m_Accounts[columns[2]];
+                var amount = float.Parse(columns[4]);
+                var narrative = columns[3];
+                var date = DateTime.Parse(columns[0]);
+                var transaction = new Transaction(ref sender, ref recipient, amount, narrative, date);
+                
+            }
+
+        }
+
         static void HandleCLIArguments(string[] args)
         {
             // Print correct data according to command line arguments
@@ -73,6 +90,15 @@ namespace Support_Bank
             file.ReadLine();
 
             CreateAllAccounts(file);
+
+            // Reset FileReader to beginning
+            file.BaseStream.Position = 0;
+            file.DiscardBufferedData();
+            
+            // Skip line containing column titles
+            file.ReadLine();
+            
+            ParseTransactions(file);
 
             HandleCLIArguments(args);
         }

@@ -40,6 +40,10 @@ namespace Support_Bank
                 var date = DateTime.Parse(columns[0]);
                 var transaction = new Transaction(ref sender, ref recipient, amount, narrative, date);
                 
+                m_AllTransactions.Add(transaction);
+                
+                sender.HandleOutgoing(ref transaction);
+                recipient.HandleOutgoing(ref transaction);
             }
 
         }
@@ -81,6 +85,7 @@ namespace Support_Bank
         static void Main(string[] args)
         {
             m_Accounts = new Dictionary<string, Account>();
+            m_AllTransactions = new List<Transaction>();
 
             // TODO: Check file is readable
             string path = "Transactions2014.csv";
@@ -104,5 +109,6 @@ namespace Support_Bank
         }
 
         private static Dictionary<string, Account> m_Accounts;
+        private static List<Transaction> m_AllTransactions;
     }
 }

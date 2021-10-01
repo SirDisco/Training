@@ -10,34 +10,41 @@ namespace Support_Bank
    {
        m_Name = name;
 
- /*      m_Ingoings = ingoings;
-       m_Outgoings = outgoings;
-       
-       m_totalIngoings = totalIngoings;
-       m_totalOutgoings = totalOutgoings;
-       m_accountBalance = accountBalance;
-  */ }
+       m_Incomings = new List<Transaction>();
+       m_Outgoings = new List<Transaction>();
+   }
+
+   public void HandleIncoming(ref Transaction transaction)
+   {
+       m_Incomings.Add(transaction);
+       m_TotalIncomings += transaction.GetAmount();
+   }
+   
+   public void HandleOutgoing(ref Transaction transaction)
+   {
+       m_Outgoings.Add(transaction);
+       m_TotalOutgoings += transaction.GetAmount();
+   }
    
    // Getter 
    
    // Determines and sets total account balance
-   public float SetAccountBalance(float accountBalance)
+   public void CalculateAccountBalance()
    {
-       m_accountBalance = m_totalIngoings - m_totalOutgoings;
-       return accountBalance;
+       m_AccountBalance = m_TotalIncomings - m_TotalOutgoings;
    }
        // Prints formatted account info to console
 
    public void GetAccountInfo(string accountInfo)
    {
-       Console.WriteLine($"Account Name: {m_Name} \r\n Owing: {m_Outgoings} \r\n Owed: {m_Ingoings}");
-       if (m_accountBalance < 0)
+       Console.WriteLine($"Account Name: {m_Name} \r\n Owing: {m_Outgoings} \r\n Owed: {m_Incomings}");
+       if (m_AccountBalance < 0)
        {
-           Console.WriteLine($"After settling, {m_Name} will owe {m_accountBalance}");
+           Console.WriteLine($"After settling, {m_Name} will owe {m_AccountBalance}");
        }
-       else if (m_accountBalance > 0)
+       else if (m_AccountBalance > 0)
        {
-           Console.WriteLine($"After settling, {m_Name} will be owed {m_accountBalance}");
+           Console.WriteLine($"After settling, {m_Name} will be owed {m_AccountBalance}");
        }
        else
        {
@@ -46,16 +53,12 @@ namespace Support_Bank
    }
    
    // Members
-   private List<Transaction> m_Ingoings;
+   private List<Transaction> m_Incomings;
    private List<Transaction> m_Outgoings;
    
-   private string m_Name;
-   private float m_totalIngoings;
-   private float m_totalOutgoings;
-   private float m_accountBalance;
-   
-
-
-
+   private string m_Name = "";
+   private float m_TotalIncomings = 0;
+   private float m_TotalOutgoings = 0;
+   private float m_AccountBalance = 0;
     }
 }

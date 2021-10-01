@@ -10,7 +10,7 @@ namespace Support_Bank
         static void AddToDictionary(string name)
         {
             if (!m_Accounts.ContainsKey(name))
-                m_Accounts[name] = new Account();
+                m_Accounts[name] = new Account(name);
         }
 
         static void CreateAllAccounts(StreamReader fileReader)

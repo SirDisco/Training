@@ -35,12 +35,12 @@ namespace Support_Bank
    }
        // Prints formatted account info to console
 
-   public void GetAccountInfo(string accountInfo)
+   public void GetAccountInfo()
    {
-       Console.WriteLine($"Account Name: {m_Name} \r\n Owing: {m_Outgoings} \r\n Owed: {m_Incomings}");
+       Console.WriteLine($"Account Name: {m_Name} \r\n Owing: {m_TotalOutgoings} \r\n Owed: {m_TotalIncomings}");
        if (m_AccountBalance < 0)
        {
-           Console.WriteLine($"After settling, {m_Name} will owe {m_AccountBalance}");
+           Console.WriteLine($"After settling, {m_Name} will owe {-m_AccountBalance}");
        }
        else if (m_AccountBalance > 0)
        {

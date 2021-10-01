@@ -43,7 +43,7 @@ namespace Support_Bank
                 m_AllTransactions.Add(transaction);
                 
                 sender.HandleOutgoing(ref transaction);
-                recipient.HandleOutgoing(ref transaction);
+                recipient.HandleIncoming(ref transaction);
             }
 
         }
@@ -71,13 +71,16 @@ namespace Support_Bank
             {
                 if (ops.user == null)
                 {
-                    // TODO: this
-                    Console.WriteLine("Print all user information (excluding transactions)");
+                    foreach (var account in m_Accounts)
+                    {
+                        account.Value.CalculateAccountBalance();
+                        account.Value.GetAccountInfo();
+                    }
                 }
                 else
                 {
-                    // TODO: this
-                    Console.WriteLine($"Print information owned by user {ops.user} (excluding transactions)");
+                    m_Accounts[ops.user].CalculateAccountBalance();
+                    m_Accounts[ops.user].GetAccountInfo();
                 }
             });
         }

@@ -35,7 +35,7 @@ namespace Support_Bank
    }
        // Prints formatted account info to console
 
-   public void GetAccountInfo()
+   public void PrintSimpleInfo()
    {
        Console.WriteLine($"Account Name: {m_Name} \r\n Owing: {m_TotalOutgoings} \r\n Owed: {m_TotalIncomings}");
        if (m_AccountBalance < 0)
@@ -49,6 +49,16 @@ namespace Support_Bank
        else
        {
            Console.WriteLine($"Hey, {m_Name} broke even!");
+       }
+   }
+   
+   public void PrintAllInfo()
+   {
+       foreach (Transaction tr in m_Outgoings)
+       {
+           var onlyDate = tr.GetDate().ToString("dd/MM/yyyy");
+           var amountFormatted = string.Format("{0:0.00}", tr.GetAmount());
+           Console.WriteLine($"{onlyDate} - £{amountFormatted} going to {tr.GetReceiver().m_Name} - {tr.GetNarrative()}");
        }
    }
    

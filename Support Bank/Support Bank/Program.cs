@@ -57,13 +57,16 @@ namespace Support_Bank
             {
                 if (ops.user == null)
                 {
-                    // TODO: this
-                    Console.WriteLine("Print all user information (including transactions)");
+                    foreach (var account in m_Accounts)
+                    {
+                        account.Value.CalculateAccountBalance();
+                        account.Value.PrintAllInfo();
+                    }
                 }
                 else
                 {
-                    // TODO: this
-                    Console.WriteLine($"Print information owned by user {ops.user} (including transactions)");
+                    m_Accounts[ops.user].CalculateAccountBalance();
+                    m_Accounts[ops.user].PrintAllInfo();
                 }
             });
             
@@ -74,13 +77,13 @@ namespace Support_Bank
                     foreach (var account in m_Accounts)
                     {
                         account.Value.CalculateAccountBalance();
-                        account.Value.GetAccountInfo();
+                        account.Value.PrintSimpleInfo();
                     }
                 }
                 else
                 {
                     m_Accounts[ops.user].CalculateAccountBalance();
-                    m_Accounts[ops.user].GetAccountInfo();
+                    m_Accounts[ops.user].PrintSimpleInfo();
                 }
             });
         }

@@ -7,59 +7,20 @@ namespace Support_Bank
 {
     class Program
     {
-        static void AddToDictionary(string name)
+        static public void AddToDictionary(string name)
         {
             if (!m_Accounts.ContainsKey(name))
                 m_Accounts[name] = new Account(name);
         }
 
-        static void CreateAllAccounts(StreamReader fileReader)
+        static public void AddToTransactions(Transaction transaction)
         {
-            string line;
-            while ((line = fileReader.ReadLine()) != null)
-            {
-                string[] columns = line.Split(",");
-                
-                // Indices
-                // 0: date, 1: sender, 2: recipient, 3: narrative, 4: amount
-                AddToDictionary(columns[1]);
-                AddToDictionary(columns[2]);
-            }
+            m_AllTransactions.Add(transaction);
         }
 
-        static void ParseTransactions(StreamReader fileReader)
+        static public Account GetAccount(string name)
         {
-            string line;
-            while ((line = fileReader.ReadLine()) != null)
-            {
-                string[] columns = line.Split(",");
-                var sender = m_Accounts[columns[1]];
-                var recipient = m_Accounts[columns[2]];
-                
-                // Check amount formatting is correct
-                if (!float.TryParse(columns[4], out var amount))
-                {
-                    Console.WriteLine("Failed to parse amount for transaction (check formatting)");
-                    continue;
-                }
-                
-                var narrative = columns[3];
-                
-                // Check date formatting is correct
-                if (!DateTime.TryParse(columns[0], out var date))
-                {
-                    Console.WriteLine("Failed to parse date for transaction (check formatting)");
-                    continue;
-                }
-
-                var transaction = new Transaction(ref sender, ref recipient, amount, narrative, date);
-                
-                m_AllTransactions.Add(transaction);
-                
-                sender.HandleOutgoing(ref transaction);
-                recipient.HandleIncoming(ref transaction);
-            }
-
+            return m_Accounts[name];
         }
 
         static void HandleCLIArguments(string[] args)
@@ -108,22 +69,20 @@ namespace Support_Bank
             m_AllTransactions = new List<Transaction>();
 
             // TODO: Check file is readable
-            string path = "DodgyTransactions2015.csv";
+            // string path = "DodgyTransactions2015.csv";
+            string path = "Transactions2013.json";
             var file = new StreamReader(path);
 
             // Skip line containing column titles
-            file.ReadLine();
+            // file.ReadLine();
 
-            CreateAllAccounts(file);
+            FileHelper.CreateAllAccountsJSON(file);
 
             // Reset FileReader to beginning
             file.BaseStream.Position = 0;
             file.DiscardBufferedData();
-            
-            // Skip line containing column titles
-            file.ReadLine();
-            
-            ParseTransactions(file);
+
+            FileHelper.ParseTransactionsJSON(file);
 
             HandleCLIArguments(args);
         }

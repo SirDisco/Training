@@ -35,9 +35,23 @@ namespace Support_Bank
                 string[] columns = line.Split(",");
                 var sender = m_Accounts[columns[1]];
                 var recipient = m_Accounts[columns[2]];
-                var amount = float.Parse(columns[4]);
+                
+                // Check amount formatting is correct
+                if (!float.TryParse(columns[4], out var amount))
+                {
+                    Console.WriteLine("Failed to parse amount for transaction (check formatting)");
+                    continue;
+                }
+                
                 var narrative = columns[3];
-                var date = DateTime.Parse(columns[0]);
+                
+                // Check date formatting is correct
+                if (!DateTime.TryParse(columns[0], out var date))
+                {
+                    Console.WriteLine("Failed to parse date for transaction (check formatting)");
+                    continue;
+                }
+
                 var transaction = new Transaction(ref sender, ref recipient, amount, narrative, date);
                 
                 m_AllTransactions.Add(transaction);
@@ -94,7 +108,7 @@ namespace Support_Bank
             m_AllTransactions = new List<Transaction>();
 
             // TODO: Check file is readable
-            string path = "Transactions2014.csv";
+            string path = "DodgyTransactions2015.csv";
             var file = new StreamReader(path);
 
             // Skip line containing column titles

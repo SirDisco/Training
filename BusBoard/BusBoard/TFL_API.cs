@@ -7,17 +7,13 @@ namespace BusBoard
 {
     public class TFL_API
     {
-        private RestClient client;
-
-        public TFL_API()
+        public static IOrderedEnumerable<Arrival> GetArrivalListFromStopID(string id)
         {
-            ClientCheck();
-        }
-
-        public IOrderedEnumerable<Arrival> GetArrivalListFromStopID(string id)
-        {
+            if (_Client == null)
+                _Client = new RestClient("https://api.tfl.gov.uk");
+            
             var request = new RestRequest($"/StopPoint/{id}/Arrivals");
-            var response = client.Get<List<Arrival>>(request);
+            var response = _Client.Get<List<Arrival>>(request);
 
             var allArrivals = response.Data;
 
@@ -26,11 +22,14 @@ namespace BusBoard
             return sortedList;
         }
 
-        public void PrintArrivalListFromStopID(string id, int howMany)
+        public static void PrintArrivalListFromStopID(string id, int howMany)
         {
+            if (_Client == null)
+                _Client = new RestClient("https://api.tfl.gov.uk");
+            
             var request = new RestRequest($"/StopPoint/{id}/Arrivals");
 
-            var response = client.Get<List<Arrival>>(request);
+            var response = _Client.Get<List<Arrival>>(request);
 
             var allArrivals = response.Data;
             
@@ -49,8 +48,11 @@ namespace BusBoard
         }
         
 
-        public List<string> GetStopIDFromLongLat(decimal latitude, decimal longitude, int howMany)
+        public static List<string> GetStopIDFromLongLat(decimal latitude, decimal longitude, int howMany)
         {
+            if (_Client == null)
+                _Client = new RestClient("https://api.tfl.gov.uk");
+            
             var type = "bus";
             var stopTypes = "NaptanPublicBusCoachTram";
             var request = 
@@ -60,13 +62,13 @@ namespace BusBoard
                                 $"&lon={longitude}" +
                                 $"&useStopPointHierarchy=false&modes={type}");
 
-            var response = client.Get<List<BusStop>>(request);
+            var response = _Client.Get<List<BusStop>>(request);
 
             var allBusStops = response.Data;
 
             List<string> result = new List<string>();
             
-            //allBusStops.First().StopPoints = allBusStops.First().StopPoints.OrderBy(o => o.Distance).ToList();
+            allBusStops.First().StopPoints = allBusStops.First().StopPoints.OrderBy(o => o.Distance).ToList();
 
             foreach (var stop in allBusStops[0].StopPoints.Take(howMany))
             {
@@ -75,12 +77,7 @@ namespace BusBoard
 
             return result;
         }
-        private void ClientCheck()
-        {
-            if (client == null)
-            {
-                client = new RestClient("https://api.tfl.gov.uk");
-            }
-        }
+
+        private static RestClient _Client;
     }
 }

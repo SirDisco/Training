@@ -69,20 +69,22 @@ namespace Support_Bank
             m_AllTransactions = new List<Transaction>();
 
             // TODO: Check file is readable
-            // string path = "DodgyTransactions2015.csv";
-            string path = "Transactions2013.json";
+            string path = "Transactions2012.xml";
             var file = new StreamReader(path);
 
-            // Skip line containing column titles
-            // file.ReadLine();
+            SupportBankFileReader fileReader = null;
 
-            FileHelper.CreateAllAccountsJSON(file);
+            if (path.EndsWith(".csv"))
+                fileReader = new FileReaderCSV();
+            else if (path.EndsWith(".json"))
+                fileReader = new FileReaderJSON();
+            else if (path.EndsWith(".xml"))
+                fileReader = new FileReaderXML();
+            else
+                return;
 
-            // Reset FileReader to beginning
-            file.BaseStream.Position = 0;
-            file.DiscardBufferedData();
-
-            FileHelper.ParseTransactionsJSON(file);
+            fileReader.CreateAllAccounts(file);
+            fileReader.ParseTransactions(file);
 
             HandleCLIArguments(args);
         }

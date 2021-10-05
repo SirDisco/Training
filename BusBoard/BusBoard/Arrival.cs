@@ -2,11 +2,6 @@ using System;
 
 namespace BusBoard
 {
-    // lineName
-    // destinationName
-    // expectedArrival
-    // stationName
-    
     public class Arrival
     {
         public string LineName { get; set; }
@@ -16,10 +11,3 @@ namespace BusBoard
         public string PlatformName { get; set; }
     }
 }
-
-/*
-    public static int CompareExpectedArrival(Arrival x, Arrival y)
-    {
-        return y.ExpectedArrival.CompareTo(x.ExpectedArrival);
-    }
-*/

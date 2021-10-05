@@ -1,10 +1,9 @@
-using System.Collections.Generic;
-using System.Linq;
-
 namespace BusBoard
 {
     public class BusStop
     {
-        public List<StopPoints> StopPoints { get; set; }
+        public string NaptanId { get; set; }
+        public decimal Distance { get; set; }
+        public string CommonName { get; set; }
     }
 }

@@ -68,18 +68,13 @@ namespace BusBoard
             
             //allBusStops.First().StopPoints = allBusStops.First().StopPoints.OrderBy(o => o.Distance).ToList();
 
-            foreach (var stop in allBusStops[0].StopPoints)
+            foreach (var stop in allBusStops[0].StopPoints.Take(howMany))
             {
-                Console.WriteLine(stop.NaptanId);
                 result.Add(stop.NaptanId);
             }
 
             return result;
-
-
-
         }
-
         private void ClientCheck()
         {
             if (client == null)
@@ -87,9 +82,5 @@ namespace BusBoard
                 client = new RestClient("https://api.tfl.gov.uk");
             }
         }
-
-
-        
-        
     }
 }

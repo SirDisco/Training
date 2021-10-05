@@ -48,7 +48,7 @@ namespace BusBoard
         }
         
 
-        public static List<string> GetStopIDFromLongLat(decimal latitude, decimal longitude, int howMany)
+        public static List<string> GetStopIDFromLongLat(LatitudeLongitude latitudeLongitude, int howMany)
         {
             if (_Client == null)
                 _Client = new RestClient("https://api.tfl.gov.uk");
@@ -58,8 +58,8 @@ namespace BusBoard
             var request = 
                 new RestRequest(
                                 $"/StopPoint?stopTypes={stopTypes}" +
-                                $"&lat={latitude}" +
-                                $"&lon={longitude}" +
+                                $"&lat={latitudeLongitude.Latitude}" +
+                                $"&lon={latitudeLongitude.Longitude}" +
                                 $"&useStopPointHierarchy=false&modes={type}");
 
             var response = _Client.Get<List<BusStop>>(request);

@@ -17,7 +17,7 @@ namespace BusBoard
     
     public class Postcode_API
     {
-        public static Tuple<decimal, decimal> GetLatLongFromPostcode(string postcode)
+        public static LatitudeLongitude GetLatLongFromPostcode(string postcode)
         {
             if (_Client == null)
                 _Client = new RestClient("http://api.postcodes.io/");
@@ -31,11 +31,8 @@ namespace BusBoard
                 Console.WriteLine("Unable to get latitude and longitude");
                 return null;
             }
-            
-            var latitude = response.Result[0].Latitude;
-            var longitude = response.Result[0].Longitude;
-            
-            return new Tuple<decimal, decimal>(latitude, longitude);
+
+            return response.Result[0];
         }
 
         private static RestClient? _Client = null;

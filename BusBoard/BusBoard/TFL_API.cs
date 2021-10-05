@@ -22,6 +22,7 @@ namespace BusBoard
                                 $"&useStopPointHierarchy=false&modes={type}");
 
             var response = _Client.Get<List<BusStopsWithinArea>>(request);
+            ResponseValidator.CheckResponse(response);
 
             var allBusStops = response.Data.First().StopPoints;
             

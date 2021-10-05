@@ -14,6 +14,7 @@ namespace BusBoard
             
             var request = new RestRequest($"/StopPoint/{id}/Arrivals");
             var response = _Client.Get<List<Arrival>>(request);
+            ResponseValidator.CheckResponse(response);
 
             var allArrivals = response.Data;
 
@@ -30,6 +31,7 @@ namespace BusBoard
             var request = new RestRequest($"/StopPoint/{id}/Arrivals");
 
             var response = _Client.Get<List<Arrival>>(request);
+            ResponseValidator.CheckResponse(response);
 
             var allArrivals = response.Data;
             
@@ -63,6 +65,7 @@ namespace BusBoard
                                 $"&useStopPointHierarchy=false&modes={type}");
 
             var response = _Client.Get<List<BusStop>>(request);
+            ResponseValidator.CheckResponse(response);
 
             var allBusStops = response.Data;
 

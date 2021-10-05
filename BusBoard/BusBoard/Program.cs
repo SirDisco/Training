@@ -6,8 +6,7 @@ namespace BusBoard
     {
         static void Main(string[] args)
         {
-            var input = "NW51TL";
-            // test
+            var input = "NW5 1TL";
             
             var coordinates = Postcode_API.GetLatLongFromPostcode(input);
             var nearestStops = TFL_API.GetStopIDFromLongLat(coordinates, 2);

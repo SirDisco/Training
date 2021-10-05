@@ -34,6 +34,7 @@ namespace BusBoard
                 Console.WriteLine($"The {arrival.LineName} arriving at {arrival.ExpectedArrival}\n" +
                                   $"Destination: {arrival.DestinationName}\n");
             }
+            Console.WriteLine();
         }
     }
 }

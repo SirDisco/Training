@@ -7,9 +7,15 @@ namespace BusBoard
 {
     public class TFL_API
     {
+        private RestClient client;
+
+        public TFL_API()
+        {
+            ClientCheck();
+        }
+
         public IOrderedEnumerable<Arrival> GetArrivalListFromStopID(string id)
         {
-            var client = new RestClient("https://api.tfl.go.uk");
             var request = new RestRequest($"/StopPoint/{id}/Arrivals");
             var response = client.Get<List<Arrival>>(request);
 
@@ -22,7 +28,6 @@ namespace BusBoard
 
         public void PrintArrivalListFromStopID(string id, int howMany)
         {
-            var client = new RestClient("https://api.tfl.gov.uk");
             var request = new RestRequest($"/StopPoint/{id}/Arrivals");
 
             var response = client.Get<List<Arrival>>(request);
@@ -42,5 +47,49 @@ namespace BusBoard
                 Console.WriteLine("\n");
             }
         }
+        
+
+        public List<string> GetStopIDFromLongLat(decimal latitude, decimal longitude, int howMany)
+        {
+            var type = "bus";
+            var stopTypes = "NaptanPublicBusCoachTram";
+            var request = 
+                new RestRequest(
+                                $"/StopPoint?stopTypes={stopTypes}" +
+                                $"&lat={latitude}" +
+                                $"&lon={longitude}" +
+                                $"&useStopPointHierarchy=false&modes={type}");
+
+            var response = client.Get<List<BusStop>>(request);
+
+            var allBusStops = response.Data;
+
+            List<string> result = new List<string>();
+            
+            //allBusStops.First().StopPoints = allBusStops.First().StopPoints.OrderBy(o => o.Distance).ToList();
+
+            foreach (var stop in allBusStops[0].StopPoints)
+            {
+                Console.WriteLine(stop.NaptanId);
+                result.Add(stop.NaptanId);
+            }
+
+            return result;
+
+
+
+        }
+
+        private void ClientCheck()
+        {
+            if (client == null)
+            {
+                client = new RestClient("https://api.tfl.gov.uk");
+            }
+        }
+
+
+        
+        
     }
 }

@@ -9,8 +9,14 @@ namespace BusBoard
     {
         static void Main(string[] args)
         {
-            var tfl = new TFL_API();
-            tfl.PrintArrivalListFromStopID("490008660N", 5);
+            var tflApi = new TFL_API();
+            var nearestStops = tflApi.GetStopIDFromLongLat((decimal)51.553935, (decimal)-0.144754, 2);
+
+
+            
+            //490008660N
+
+
 
         }
     }

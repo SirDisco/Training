@@ -8,18 +8,12 @@ namespace BusBoard
     {
         static void Main(string[] args)
         {
-            var input = "NW51TL";
             var howManyStops = 2;
             var howManyArrivals = 5;
-            
-            var coordinates = Postcode_API.GetLatLongFromPostcode(input);
-            var nearestStops = TFL_API.GetStopFromLongLat(coordinates, howManyStops);
 
-            foreach (var busStop in nearestStops)
-            {
-                PrintBusStopHeader(busStop);
-                PrintListOfArrivals(TFL_API.GetArrivalListFromStop(busStop, howManyArrivals));
-            }
+            var UI = new UserInterface(howManyStops, howManyArrivals);
+            UI.Run();
+            
         }
 
         static void PrintBusStopHeader(BusStop stop)

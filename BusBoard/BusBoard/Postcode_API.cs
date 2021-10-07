@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Windows.Markup;
 using RestSharp;
 
 namespace BusBoard
@@ -17,8 +18,22 @@ namespace BusBoard
         public decimal Longitude { get; set; }
     }
     
+
+    
     public class Postcode_API
     {
+        public static bool IsValidPostcode(string stringToCheck)
+        {
+            Regex postCodeRX = new Regex(
+                @"^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})$",
+                RegexOptions.Compiled | RegexOptions.IgnoreCase
+            );
+            
+            if (postCodeRX.Match(stringToCheck).Success)
+                return true;
+            
+            return false;
+        }
         public static LatitudeLongitude GetLatLongFromPostcode(string postcode)
         {
             // Define a regular expression for postcodes.

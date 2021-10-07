@@ -4,6 +4,7 @@ namespace BusBoard
     {
         Lost,
         ChooseYourStop,
+        ProvideLocation,
         AtStop,
         AtArrivals,
         AtDirections,
@@ -12,7 +13,7 @@ namespace BusBoard
     public enum LocationType
     {
         Postcode,
-        LonLat,
+        LatLong,
         StopID,
         Invalid
     }

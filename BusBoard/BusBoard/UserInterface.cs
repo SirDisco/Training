@@ -6,7 +6,7 @@ namespace BusBoard
     public class UserInterface
     {
         // Current Enquiry Values.
-        private LatitudeLongitude longLat;
+        private LatitudeLongitude latLong;
         private string postCode;
         private string stopID;
         private BusStop currentStop;
@@ -36,6 +36,8 @@ namespace BusBoard
                     case States.ChooseYourStop:
                         ChooseYourStop(_nearbyBusStops);
                         break;
+                    case States.ProvideLocation:
+                        // where are you?
                     case States.AtStop:
                         AtStop();
                         break;
@@ -54,8 +56,50 @@ namespace BusBoard
 
         private void AtStop()
         {
+            // Get arrivals from tfl_api
+            var arrivals = TFL_API.GetArrivalListFromStop(currentStop, arrivalsToShow);
             // Display Arrivals
+            foreach (var arrival in arrivals)
+            {
+                Console.WriteLine($"The {arrival.LineName} arriving at {arrival.ExpectedArrival}\n" +
+                                  $"Destination: {arrival.DestinationName}\n");
+            }
             // Give option of directions to Stop (will require location prompt).
+            Console.WriteLine($"Choose Option:\n[1] get directions to stop\n[2] return to nearby stops\n[3] start over");
+
+            // Read user input
+            int userSelection = -1;
+            bool validSelection = false;
+            while (!validSelection)
+            {
+                userSelection = int.Parse(Console.ReadLine());
+                if (userSelection >= 1 && userSelection <= 3)
+                {
+                    validSelection = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid selection, have another go...");
+                }
+            }
+            
+            // selection execution
+            switch (userSelection)
+            {
+                case 1:
+                    if (latLong == null)
+                    {
+                        
+                    }
+                    break;
+                case 2:
+                    currentState = States.ChooseYourStop;
+                    break;
+                case 3:
+                    currentState = States.Lost;
+                    break;
+            }
+
         }
         
 
@@ -74,11 +118,11 @@ namespace BusBoard
                 switch (locationType)
                 {
                     case LocationType.Postcode:
-                        longLat = Postcode_API.GetLatLongFromPostcode(stringToValidate);
-                        _nearbyBusStops = TFL_API.GetStopFromLongLat(longLat, _nearestStopsToShow);
+                        latLong = Postcode_API.GetLatLongFromPostcode(stringToValidate);
+                        _nearbyBusStops = TFL_API.GetStopFromLongLat(latLong, _nearestStopsToShow);
                         currentState = States.ChooseYourStop;
                         break;
-                    case LocationType.LonLat:
+                    case LocationType.LatLong:
                         
                         break;
                     case LocationType.StopID:
@@ -106,6 +150,8 @@ namespace BusBoard
 
             return LocationType.Invalid;
         }
+        
+        private void ProvideLocation 
 
         private void ChooseYourStop(List<BusStop> busStops)
         {
@@ -168,7 +214,7 @@ namespace BusBoard
 
         private void _initEnquiry()
         {
-            longLat = null;
+            latLong = null;
             _nearbyBusStops = new List<BusStop>();
             currentStop = null;
         }

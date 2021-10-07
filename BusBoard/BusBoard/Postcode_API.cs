@@ -13,6 +13,14 @@ namespace BusBoard
     
     public class LatitudeLongitude
     {
+        public LatitudeLongitude() {}
+        
+        public LatitudeLongitude(double lat, double lon)
+        {
+            Latitude = (decimal)lat;
+            Longitude = (decimal)lon;
+        }
+
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
     }

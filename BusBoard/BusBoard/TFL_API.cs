@@ -45,5 +45,21 @@ namespace BusBoard
         }
 
         private static RestClient _Client;
+
+        public static List<Direction> GetDirections(LatitudeLongitude startCoordinates, LatitudeLongitude endCoordinates)
+        {
+            if (_Client == null)
+                _Client = new RestClient("https://api.tfl.gov.uk");
+
+            var startPoint = $"{startCoordinates.Latitude},{startCoordinates.Longitude}";
+            var endPoint = $"{endCoordinates.Latitude},{endCoordinates.Longitude}";
+            
+            var request = new RestRequest($"/Journey/JourneyResults/{startPoint}/to/{endPoint}");
+            var response = _Client.Get<JourneyPlanner>(request);
+
+            var data = response.Data;
+
+            return data.Journeys[0].Legs[0].Instruction.Steps;
+        }
     }
 }
